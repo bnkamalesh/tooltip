@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tool tip text</title>
+	<link rel="stylesheet" type="text/css" href="tooltip.css">
+	<script type="text/javascript" src="jquery.js"> </script>
+	<script type="text/javascript" src="tooltip.js"> </script>
+	<style>
+	body {
+		font-family: Arial;
+		font-size: 16px;
+		line-height: 24px;
+		background: #efefef;
+	}
+	img { max-width: 200px; display: block; }
+	h1 {
+		text-align: center;
+		margin: 0 0 64px 0;
+	}
+
+	#wrap {
+		width: 700px;
+		margin: 50px auto;
+		padding: 40px 20px;
+		background: #fff;
+	}
+
+	#list {
+		max-width: 70%;
+		margin: 0 auto;
+	}
+	#list li {
+		border: 1px solid #ddd;
+		padding: 30px 40px;
+		list-style-type: none;
+		margin: 0 20px 20px 0;
+		display: inline-block;
+		text-align: center;
+	}
+	#tooltip img {
+		max-width: 100px;
+		display: block;
+	}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<h1>Tooltip text</h1>
+		<ul id="list">
+			<li>Top <br /><small>[hover]</small></li>
+			<li>Bottom <br /><small>[hover]</small></li>
+			<li>Right <br /><small>[hover]</small></li>
+			<li>The follower <small>[hover image]</small> <img src="images/1.jpg" alt="Hello" /> </li>
+			<li>Left <br /><small>[click]</small></li>
+		</ul>
+
+		<ol id="list2">
+			<li>Hello <small>[hover]</small></li>
+			<li>World <small>[hover]</small></li>
+			<li>There <small>[hover]</small></li>
+		</ol>
+			<div class="clear"> </div>
+	</div>
+	<script>
+	$(document).ready(function() {
+		tttext.init();
+		
+		tttext.attach( $("#list li:eq(0)"), {message: "Scarlett Johnson <img src='images/1.jpg' alt='Scarlett'/>", position: "top", offset: 13});
+		tttext.attach( $("#list li:eq(1)"), {message: "Bottom", position: "bottom"});
+		tttext.attach( $("#list li:eq(2)"), {message: "The right wing.", position: "right"});
+		tttext.attach( $("#list li:eq(3) img"), {message: " Scarlett Johnson", type: "follow"});
+		tttext.attach( $("#list li:eq(4)"), {message: "Message for the left :-/", position: "left", type: "click"});
+
+		tttext.attach($("#list2 li"), {message: "common message", position: "top", horizontal_centre: false, offset: 10});
+	});
+	</script>
+</body>
+</html>
