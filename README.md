@@ -11,7 +11,7 @@ Available options
 	{
 	  type: "hover" / "click" / "follow", // String. default is "hover"
 	  
-	  message: "The message to be displayed inside the tooltip", // String
+	  message: "The message to be displayed inside the tooltip", // String/HTML. This is mandatory
 	  
   	  duration: 300, // Integer. Animation time in milliseconds, default is 300
   	  
@@ -32,9 +32,8 @@ Available options
 Usage
 =====
   Before using tttext, the function 'init()' should be called like mentioned below.
-  The options are optional. But these options will be defaulted to all future attachments.
-  
-    tttext.init({position: "top"});
+  Options set during 'init()' will be set as default and be used on all future uses.
+  tttext.init({position: "top"});
   
   Attach tooltiptext to an element like shown below. Options provided will override default options.
     ttttext.attach($("p"), {
