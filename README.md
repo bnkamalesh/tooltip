@@ -27,6 +27,21 @@ Available options
 	  
 	  ttcontainer: $("#tooltip"),  // JQuery object, default is $("#tooltip")
 	}
+
+Available Methods
+=================
+
+	tttext.init(options)       	   : options - JSON OBJECT, same as the options mentioned above. Should be 						     called only once, on a page.
+	
+	tttext.setDefaults(options)        : options - JSON OBJECT, same as the options mentioned above. Resets the 						     default values.
+	
+	tttext.attach(target, options)     : target - JQuery object of the target element.
+					     options - JSON OBJECT, same as the options mentioned above
+
+	tttext.manual_show(target)	   : target - JQuery object of the target element.
+					    -show the tooltip attached to an element manually.
+
+	tttext.manual_hide()		   : Manually hide currently visible tooltip.
 	
 	
 Usage
@@ -36,7 +51,8 @@ Usage
   tttext.init({position: "top"});
   
   Attach tooltiptext to an element like shown below. Options provided will override default options.
-    ttttext.attach($("p"), {
+  
+    tttext.attach($("p"), {
     	message:"Hello World", 
     	position: "bottom", 
     	type: "click", 
