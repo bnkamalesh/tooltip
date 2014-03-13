@@ -12,30 +12,36 @@
 		line-height: 24px;
 		background: #efefef;
 	}
-	img { max-width: 200px; display: block; }
+	img { max-width: 100%; display: block; }
+
 	h1 {
 		text-align: center;
 		margin: 0 0 64px 0;
 	}
 
 	#wrap {
-		width: 700px;
+		width: 70%;
 		margin: 50px auto;
-		padding: 40px 20px;
 		background: #fff;
 	}
 
 	#list {
 		max-width: 70%;
 		margin: 0 auto;
+		padding: 0;
 	}
 	#list li {
+		max-width: 200px;
 		border: 1px solid #ddd;
 		padding: 30px 40px;
 		list-style-type: none;
 		margin: 0 20px 20px 0;
 		display: inline-block;
 		text-align: center;
+	}
+	#list2 li {
+		border: 1px solid #eee;
+		margin: 30px 0;
 	}
 	#tooltip img {
 		max-width: 100px;
@@ -51,21 +57,21 @@
 			<li>Bottom <br /><small>[hover]</small></li>
 			<li>Right <br /><small>[hover]</small></li>
 			<li>The follower <small>[hover image]</small> <img src="images/1.jpg" alt="Hello" /> </li>
-			<li class="chk">Left <br /><small>[click]</small></li>
+			<li class="check">Left <br /><small>[click]</small></li>
 		</ul>
 
-		<ol id="list2">
+		<ul id="list2">
 			<li>Hello <small>[hover]</small></li>
 			<li>World <small>[hover]</small></li>
 			<li>There <small>[hover]</small></li>
-		</ol>
+		</ul>
 			<div class="clear"> </div>
 	</div>
 	<script>
-	$(document).ready(function() {
+	$(window).load(function() {
 		tttext.init();
 		
-		tttext.attach( $("#list li:eq(0)"), {message: "Scarlett Johnson <img src='images/1.jpg' alt='Scarlett'/>", position: "top", offset: 13});
+		tttext.attach( $("#list li:eq(0)"), {message: "Scarlett Johnson <img src='images/1.jpg' alt='Scarlett'/>", position: "top", offset: 12});
 		tttext.attach( $("#list li:eq(1)"), {message: "Bottom", position: "bottom"});
 		tttext.attach( $("#list li:eq(2)"), {message: "The right wing.", position: "right"});
 		tttext.attach( $("#list li:eq(3) img"), {message: " Scarlett Johnson", type: "follow"});
@@ -73,13 +79,13 @@
 		var item = $("#list li:eq(4)");
 		tttext.attach( $("#list li:eq(4)"), {message: "Message for the left :-/", position: "left", type: "click", condition: function() { 
 			
-			if(item.hasClass("chk"))
+			if(item.hasClass("check"))
 				return true;
 			return false;
 		}
 		});
 
-		tttext.attach($("#list2 li"), {message: "common message", position: "top", horizontal_centre: false, offset: 10});
+		tttext.attach($("#list2 li"), {message: "common message", position: "top", horizontal_centre: false, offset: 12}).css("margin-top");
 	});
 	</script>
 </body>
