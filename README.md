@@ -22,6 +22,7 @@ Available options
 	  condition: function() // A function which should return either true or false.
 	  
 	  horizontal_centre: true, // Boolean. If true, tool tip is displayed at horizontal centre of the target 					      element. default true
+
 	  vertical_centre: true, // Boolean. If true, tool tip is displayed at vertical centre of the target 						    element.Default true
 	  
 	  ttcontainer: $("#tooltip"),  // JQuery object, default is $("#tooltip")
