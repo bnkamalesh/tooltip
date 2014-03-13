@@ -36,6 +36,7 @@ var tttext = new function() {
 			item.data("duration", options.duration || duration);
 			item.data("position", options.position || position);
 			item.data("offset", options.offset || offset);
+			item.data("condition", options.condition || function(){return true;});
 
 			if(typeof(options.horizontal_centre)!="undefined")
 				item.data("horizontal_centre", options.horizontal_centre);
@@ -53,8 +54,10 @@ var tttext = new function() {
 			case "hover":
 				item.hover(function() {
 					show( $(this) );
+					return;
 				}, function() {
 					hide();
+					return;
 				});
 
 			break;
@@ -63,10 +66,12 @@ var tttext = new function() {
 				item.mousemove(function(e) {
 					$(this).data("position", e.pageX+"#"+e.pageY);
 					show($(this), type="follow");
+					return;
 				});
 
-				item.mouseout(function(){
+				item.mouseout(function() {
 					hide(type="follow");
+					return;
 				});
 
 			break;
@@ -77,6 +82,7 @@ var tttext = new function() {
 						hide();
 					else
 						show( $(this) );
+					return;
 				});
 
 			break;
@@ -85,10 +91,13 @@ var tttext = new function() {
 				hide();
 			break;
 		}
+		return item;
 	};
 
 	// show the tool tip container
 	function show(item, type) {
+		if(!item.data("condition")()) return;
+
 		var item_offset = item.offset(), left, top;
 		var width, height, pointer;
 		
@@ -129,11 +138,15 @@ var tttext = new function() {
 			case "top":
 				top -= (height+i_offset);
 				if( h_centre === true ) {
-						left += ( ( (item.outerWidth(true) - (parseInt(item.css("margin-left")) + parseInt(item.css("margin-right")) ) ) - ttcontainer.outerWidth(true) ) / 2);
+					left += ( ( (item.outerWidth(true) - (parseInt(item.css("margin-left")) + parseInt(item.css("margin-right")) ) ) - ttcontainer.outerWidth(true) ) / 2);
 				}
 				else {
 					left -= ttcontainer.outerWidth(true) /2;
 				}
+
+				if ( left < 0) { left = 0; };
+				if ( top < 0) { top = 0; };
+
 				pointer.css("left", (ttcontainer.outerWidth(true) - pointer.outerWidth(true))/2 ).addClass("top");
 			break;
 
