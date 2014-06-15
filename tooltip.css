@@ -26,7 +26,7 @@
 	display: block;
 	z-index: 110;
 }
-	#tooltip .point.top {
+	#tooltip.top .point {
 		background: url("images/point.png") no-repeat center center;
 		background-size: 50% auto;
 		bottom: -18px;
