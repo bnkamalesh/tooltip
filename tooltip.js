@@ -3,7 +3,7 @@ var tttext = new function() {
 
 	// The following variables save the default values
 
-	var type="hover", duration = 300, position = "bottom", offset = 0, 
+	var tttinstance=this, type="hover", duration = 300, position = "bottom", offset = 0, 
 		horizontal_centre = true, vertical_centre = true,
 		condition = function(){return true;}, 
 		tooltip_point = $('<span class="point"></span>'), ttcontainer = $('<div id="tooltip"></div>');
@@ -13,14 +13,14 @@ var tttext = new function() {
 	ttcontainer: The container in which tooltip is displayed
 	*/
 
-	this.init = function (options) {
+	tttinstance.init = function (options) {
 		if(!options || !options.container)
 			$('body').append(ttcontainer);
-		this.setDefaults(options);
+		tttinstance.setDefaults(options);
 	};
 
 	// setDefaults can be called explicitly to set the default behaviour throughout the page.
-	this.setDefaults = function(options) {
+	tttinstance.setDefaults = function(options) {
 		if(options) {
 			type = options.type || ''; // Type of action with which tool tip is triggered. Available types: "hover", "click", "follow". Default: "hover"
 			position = options.position || position; // Position at which the tooltip appears. Available positions: "top", "right", "bottom", "left". Default: "bottom"
@@ -34,7 +34,7 @@ var tttext = new function() {
 	};
 
 	// attach() is used to attach the tool tip to required elements
-	this.attach = function(item, options) {
+	tttinstance.attach = function(item, options) {
 		item.data("type", options.type || type);
 		item.data("duration", options.duration || duration);
 		item.data("position", options.position || position);
@@ -49,22 +49,19 @@ var tttext = new function() {
 			case "follow": // tooltip follows the cursor
 				item.mousemove(function(e) {
 					$(this).data("position", e.pageX+"#"+e.pageY);
-					show($(this));
+					tttinstance.show($(this));
 					return;
 				});
 
 				item.mouseout(function() {
-					hide(type="follow");
+					tttinstance.hide(type="follow");
 					return;
 				});
 			break;
 
 			case "click":
 				item.click(function() {
-					if( ttcontainer.hasClass("active") )
-						hide();
-					else
-						show( $(this) );
+					( ttcontainer.hasClass("active") )? tttinstance.hide(): tttinstance.show( $(this) );
 					return;
 				});
 
@@ -72,36 +69,32 @@ var tttext = new function() {
 
 			default:
 				item.hover(function() {
-					show( $(this) );
+					tttinstance.show( $(this) );
 					return;
 				}, function() {
-					hide();
+					tttinstance.hide();
 					return;
 				});
-			break;
 		}
 		return item;
 	};
 
 	// show the tool tip container
-	function show(item) {
-		if(!item.data("condition")()) return;
+	tttinstance.show = function(item) {
+		if(!item.data("condition")()) return item;
 
 		var item_offset = item.offset(), left=item_offset.left, top=item_offset.top,
 			i_offset = item.data("offset"), h_centre = item.data("h_centre"),
-			v_centre = item.data("v_centre"), pos = item.data("position"),
-			item_height = item.outerHeight(true), item_width = item.outerWidth(true);
+			v_centre = item.data("v_centre"), pos = item.data("position"), item_type = item.data("type"),
+			item_height = item.outerHeight(true), item_width = item.outerWidth(true), pos_class=((item_type=="follow")?item_type:pos);
 
-		ttcontainer.html(item.data("message")).append(tooltip_point.attr("class", "point "+pos));
-		ttcontainer.attr("class", "");
-		if( item.data("type") != "follow" )
-			ttcontainer.addClass(pos);
+		ttcontainer.html(item.data("message")).append(tooltip_point).attr("class","active "+pos_class);
 
 		switch(pos) {
 			case "left":
 				left -= (ttcontainer.outerWidth(true)+i_offset);
 				if(v_centre) {
-					var h = item_height - (parseInt(item.css('margin-bottom')));
+					var h = item_height - (parseInt(item.css("margin-bottom")));
 					h = (h/2) - (ttcontainer.outerHeight(true) / 2);
 					if(h<0)
 						h*=-1;
@@ -114,16 +107,15 @@ var tttext = new function() {
 			case "top":
 				top -= (ttcontainer.outerHeight(true)+i_offset);
 
-				if(h_centre)
-					left += ( ( (item_width - (parseInt(item.css("margin-left")) + parseInt(item.css("margin-right")) ) ) - ttcontainer.outerWidth(true) ) / 2);
-				else
-					left -= ttcontainer.outerWidth(true) /2;
+				(h_centre===true)? left += ( ( (item_width - (parseInt(item.css("margin-left")) + parseInt(item.css("margin-right")) ) ) - ttcontainer.outerWidth(true) ) / 2) : 
+				left -= ttcontainer.outerWidth(true) /2;
+				
 			break;
 
 			case "right":
-				left += (item_width - parseInt(item.css('margin-right')) )+i_offset;
+				left += (item_width - parseInt(item.css("margin-right")) )+i_offset;
 				if(v_centre) {
-					var h = item_height - (parseInt(item.css('margin-bottom')));
+					var h = item_height - (parseInt(item.css("margin-bottom")));
 					h = (h/2) - (ttcontainer.outerHeight(true) / 2);
 					if(h<0)
 						h*=-1;
@@ -143,30 +135,19 @@ var tttext = new function() {
 				}
 				else {
 					left = (h_centre)? left += ( (item_width / 2) - (ttcontainer.outerWidth(true) / 2) ): left;
-					top += (item_height - parseInt(item.css('margin-bottom')) ) + i_offset;
+					top += (item_height - parseInt(item.css("margin-bottom")) ) + i_offset;
 				}
-
-			break;
 		}
 
-		left = (left<0) ? 0 : left;
-		top = (top<0) ? 0 : top;
-
-		ttcontainer.css("left", left);
-		ttcontainer.css("top", top);
+		ttcontainer.css("left", (left<0) ? 0 : left);
+		ttcontainer.css("top", (top<0) ? 0 : top);
 
 		
-		if(item.data("type")=="follow")
-			ttcontainer.fadeIn(duration).addClass("active");
-		else
-			ttcontainer.stop(true, true).fadeIn(duration).addClass("active");
+		(item_type=="follow")? ttcontainer.fadeIn(duration) : ttcontainer.stop(true, true).fadeIn(duration);
 	}
 
-	function hide(type) {
-		var opt = (type=='follow')? false : true;
+	tttinstance.hide = function(type) {
+		var opt = (type=="follow")? false : true;
 		ttcontainer.stop(opt, opt).fadeOut(duration).removeClass("active");
 	}
-
-	this.manual_hide = function() { hide(); };
-	this.manual_show = function(item) { show(item); };
 };
